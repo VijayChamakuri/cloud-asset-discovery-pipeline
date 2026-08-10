@@ -10,6 +10,9 @@ vars:
 models:
   asset_discovery:
     staging:
-      +materialized: view
+      # Materialize staging as TABLES so the 10M-row Parquet is read once into the
+      # warehouse; marts then read from tables instead of re-scanning Parquet in
+      # parallel (which otherwise spikes memory on small machines).
+      +materialized: table
     marts:
       +materialized: table

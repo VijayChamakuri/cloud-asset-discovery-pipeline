@@ -4,4 +4,11 @@ asset_discovery:
     dev:
       type: duckdb
       path: "dbt_warehouse.duckdb"
-      threads: 4
+      threads: 1          # build serially so only one model is in memory at a time
+      # Let DuckDB spill large joins/aggregations to disk instead of OOM-ing.
+      # cross_account_exposure joins the 10M-row flow fact to resources twice;
+      # on small machines this needs a temp dir + a modest memory cap.
+      settings:
+        memory_limit: "2GB"
+        temp_directory: "target/duckdb_spill"
+        preserve_insertion_order: "false"
