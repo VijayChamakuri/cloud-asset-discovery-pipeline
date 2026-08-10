@@ -1,0 +1,19 @@
+# Pipeline configuration. Scale is intentionally parameterized so the same
+# code path that runs in CI on a tiny sample also runs at multi-million-row scale.
+run_date: "2026-08-09"
+scale:
+  n_resources: 50000        # cloud assets (EC2/S3/RDS/Lambda/...)
+  n_principals: 8000        # IAM principals / roles
+  n_flow_events: 10000000   # VPC-flow-log-style network events
+  n_api_events: 2000000     # CloudTrail-style API actions
+paths:
+  raw:    "data/raw"
+  bronze: "data/bronze"
+  silver: "data/silver"
+  gold:   "data/gold"
+  warehouse: "data/warehouse/discovery.duckdb"
+spark:
+  shuffle_partitions: 64
+dq:
+  max_null_rate_srcaddr: 0.01
+  min_referential_integrity: 0.98

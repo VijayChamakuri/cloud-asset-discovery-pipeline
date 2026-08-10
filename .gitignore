@@ -1,0 +1,15 @@
+data/
+__pycache__/
+*.pyc
+spark-warehouse/
+.pytest_cache/
+.DS_Store
+# dbt artifacts
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+dbt/dbt_warehouse.duckdb
+# local env / secrets (never commit)
+.env
+*.pem
+*.key

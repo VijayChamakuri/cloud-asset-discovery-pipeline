@@ -1,0 +1,7 @@
+asset_discovery:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "dbt_warehouse.duckdb"
+      threads: 4

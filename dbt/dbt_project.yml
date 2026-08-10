@@ -1,0 +1,15 @@
+name: 'asset_discovery'
+version: '1.0.0'
+config-version: 2
+profile: 'asset_discovery'
+model-paths: ["models"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+vars:
+  gold: "../data/gold"      # path to Spark gold Parquet, relative to dbt/ working dir
+models:
+  asset_discovery:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table

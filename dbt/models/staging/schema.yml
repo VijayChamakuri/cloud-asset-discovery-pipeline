@@ -1,0 +1,20 @@
+version: 2
+models:
+  - name: stg_resources
+    columns:
+      - name: resource_id
+        tests: [not_null, unique]
+      - name: account_id
+        tests: [not_null]
+  - name: stg_flows
+    columns:
+      - name: srcaddr
+        tests: [not_null]
+  - name: stg_appmap
+    columns:
+      - name: resource_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_resources')
+              field: resource_id

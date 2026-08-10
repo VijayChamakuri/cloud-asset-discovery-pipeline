@@ -1,0 +1,16 @@
+version: 2
+models:
+  - name: cross_account_exposure
+    columns:
+      - name: src_account
+        tests: [not_null]
+      - name: flow_count
+        tests: [not_null]
+  - name: app_blast_radius
+    columns:
+      - name: discovered_app_id
+        tests: [not_null, unique]
+  - name: suspicious_principals
+    columns:
+      - name: principal_id
+        tests: [not_null, unique]
