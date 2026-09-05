@@ -9,6 +9,7 @@ dbt/target/
 dbt/logs/
 dbt/dbt_packages/
 dbt/dbt_warehouse.duckdb
+dbt/.user.yml
 # local env / secrets (never commit)
 .env
 *.pem

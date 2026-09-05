@@ -3,7 +3,7 @@
 <p align="center">
   A production-shaped, big-data ETL pipeline that ingests cloud security telemetry,
   governs PII, models it into a warehouse, and <b>discovers applications</b> from network
-  behavior — built end to end with Spark, Airflow, dbt, and a Redshift-style warehouse.
+  behavior - built end to end with Spark, Airflow, dbt, and a Redshift-style warehouse.
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@
 You can only secure what you can see. In a large cloud estate, no single dataset says
 *what resources exist, which ones talk to each other, who acts on them,* and *which
 belong to the same application.* This project builds that map automatically: it takes
-three raw sources — network flow logs, API-activity logs, and a resource inventory —
+three raw sources - network flow logs, API-activity logs, and a resource inventory -
 and turns them into a governed, queryable, **application-level** view of the estate,
 with the data-quality and confidentiality controls a security data platform requires.
 
@@ -40,7 +40,7 @@ It is a **portfolio project**: the engineering is real and runs end to end; the 
 - **Application discovery** via connected-components graph clustering, **scored against
   ground truth** (V-measure 0.77).
 - **Apache Airflow** DAG, **dbt** models + 12 schema tests, **SNS→SQS** eventing (boto3),
-  and **CI** — every headline number **independently re-verified with a second engine (DuckDB)**.
+  and **CI** - every headline number **independently re-verified with a second engine (DuckDB)**.
 
 ---
 
@@ -68,7 +68,7 @@ flowchart LR
 All data is **100% synthetic**. It is generated to match the **public field schemas** of
 VPC Flow Logs (v2) and CloudTrail plus a simple resource inventory. **It is not real data
 from any organization** and contains no real customer, account, or security information.
-Synthetic data exists only to exercise the pipeline at realistic record scale — the
+Synthetic data exists only to exercise the pipeline at realistic record scale - the
 schemas, transforms, model, governance, and tests are the point.
 
 ---
@@ -86,7 +86,7 @@ schemas, transforms, model, governance, and tests are the point.
 | Analytics engineering (dbt models + tests) | `dbt/` |
 | Event-driven notification (SNS→SQS) | `src/notify.py` |
 | Independent verification (2nd engine) | `src/verify_independent.py` |
-| CI | `ci/github-actions.yml` |
+| CI | `.github/workflows/ci.yml` |
 
 ---
 
@@ -166,7 +166,7 @@ that label (computed in `gold_model.py`, reproduced by the DuckDB verifier).
 
 <p align="center"><img src="docs/img/discovery_accuracy.png" width="640" alt="Discovery accuracy"></p>
 
-**Honest reading:** V-measure ~0.77 is solid — the clustering recovers real structure —
+**Honest reading:** V-measure ~0.77 is solid - the clustering recovers real structure -
 but purity ~0.35 is modest: connectivity alone over-fragments apps into ~10× more clusters
 than exist (1,232 vs 120), so any single cluster only partly matches its true app. This is
 expected for unsupervised connected-components on a noisy graph and is reported as-is.
@@ -191,7 +191,7 @@ Full-scale run (config in `config/pipeline.yml`), 4 vCPU / ~4 GB RAM, single loc
 | PII leakage after masking | **0 rows** (independently verified) |
 
 ### Independent verification (second engine)
-Every headline number is recomputed straight off the Parquet with **DuckDB** — no shared
+Every headline number is recomputed straight off the Parquet with **DuckDB** - no shared
 code with the Spark pipeline. Run it yourself:
 
 ```bash
@@ -221,7 +221,7 @@ python src/verify_independent.py
 # Requirements: Python 3.10+, Java 11, then:
 pip install -r requirements.txt
 
-./run.sh sample     # fast smoke run (tiny data, same code path) — great first run
+./run.sh sample     # fast smoke run (tiny data, same code path) - great first run
 ./run.sh            # full scale: 10M flow events + 2M API events + 50K resources
 
 make test           # unit tests (pytest)
@@ -265,7 +265,7 @@ config/pipeline.yml            scale + paths + DQ thresholds
   (mocked with `moto`).
 - **dbt tests**: `not_null`, `unique`, and `relationships` across staging + marts.
 - **Data-quality gate**: runs inside the pipeline and fails the run on any breach.
-- **CI** (`ci/github-actions.yml`): unit tests → sample end-to-end run → `dbt build`.
+- **CI** (`.github/workflows/ci.yml`): unit tests, sample end-to-end run, independent verification, and `dbt build`.
 
 ---
 
@@ -273,7 +273,7 @@ config/pipeline.yml            scale + paths + DQ thresholds
 
 - Data is synthetic (public cloud-log schemas), not real production data.
 - "Scale" is demonstrated at 10M+ rows with disk spill on one machine, not at cluster/PB
-  scale — the code is written to run unchanged on EMR/Glue.
+  scale - the code is written to run unchanged on EMR/Glue.
 - Discovery uses connected components on accepted flows; **next steps**: weight edges by
   flow volume, add community detection, and lift purity above the current 0.35.
 

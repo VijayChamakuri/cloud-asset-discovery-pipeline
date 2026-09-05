@@ -1,0 +1,29 @@
+name: pipeline-ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "11"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - name: Unit tests
+        run: python -m pytest -q tests/
+      - name: End-to-end sample pipeline
+        run: ./run.sh sample
+      - name: Independent result verification
+        run: python src/verify_independent.py
